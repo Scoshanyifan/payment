@@ -10,6 +10,10 @@ import javax.persistence.Table;
 //@Table(name="product")
 public class Product {
 
+    private Long id;
 
     private String name;
+
+    private Long price;
+
 }

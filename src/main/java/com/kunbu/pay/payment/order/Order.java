@@ -28,12 +28,6 @@ public class Order implements Serializable {
     @Column(name = "order_status")
     private Integer orderStatus;
 
-    @Column(name = "product_id")
-    private String productId;
-
-    @Column(name = "origin_product_name")
-    private String originProductName;
-
     @Column(name = "pay_type")
     private Integer payType;
 

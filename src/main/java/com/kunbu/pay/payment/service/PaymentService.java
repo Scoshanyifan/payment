@@ -25,6 +25,7 @@ public class PaymentService {
 
     public String orderSign(String orderId) {
         try {
+            // 查询订单 TODO 远程
             Order order = orderRepository.findFirstByOrderId(orderId);
             if (order != null) {
                 if (OrderStatusEnum.WAIT_PAY.getStatus().equals(order.getOrderStatus())) {
@@ -36,25 +37,33 @@ public class PaymentService {
                         content.setTotalAmount(order.getOrderAmount().toString());
                         return alipayHandler.pagePay(content);
                     } else if (PayTypeEnum.WXPAY.getType().equals(order.getPayType())) {
-
+                        return null;
                     } else {
-
+                        return null;
                     }
                 } else {
                     log.error(">>> order status error:{}", order);
                 }
             }
-            return null;
         } catch (Exception e) {
             log.error(">>> orderSign error", e);
-            return null;
         }
+        return null;
     }
 
     public String payCallback(Map<String, String> callbackParams, Integer payType) {
-
-
-
+        log.info(">>> payCallback params:{}, payType:{}", callbackParams, payType);
+        try {
+            if (PayTypeEnum.ALIPAY.getType().equals(payType)) {
+                return alipayHandler.payCallback(callbackParams);
+            } else if (PayTypeEnum.WXPAY.getType().equals(payType)) {
+                return PayConstant.SUCCESS;
+            } else {
+                return PayConstant.SUCCESS;
+            }
+        } catch (Exception e) {
+            log.error(">>> payCallback error", e);
+        }
         return null;
     }
 

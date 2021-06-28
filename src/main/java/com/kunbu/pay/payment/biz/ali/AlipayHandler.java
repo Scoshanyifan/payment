@@ -57,42 +57,34 @@ public class AlipayHandler {
         return json;
     }
 
-    /**
-     * tradeStatus.TRADE_CLOSED	    交易关闭
-     * tradeStatus.TRADE_FINISHED	交易完结
-     * tradeStatus.TRADE_SUCCESS	支付成功
-     * tradeStatus.WAIT_BUYER_PAY   交易创建
-     *
-     * @param result
-     * @return
-     */
-    public String payCallback(Map<String, String> result) throws Exception {
+    public String payCallback(Map<String, String> params) throws Exception {
+        // 验签
         boolean signVerified = AlipaySignature.rsaCheckV1(
-                result,
+                params,
                 PropertyPayUtil.getValue(AlipayConstant.CONFIG_ALIPAY_PUBLIC_KEY),
                 PropertyPayUtil.getValue(AlipayConstant.CONFIG_CHARSET),
                 PropertyPayUtil.getValue(AlipayConstant.CONFIG_SIGN_TYPE)
         );
         if (signVerified) {
             // 检查基础配置
-            String callbackAppId = result.get(AlipayConstant.CONFIG_APP_ID);
+            String callbackAppId = params.get(AlipayConstant.CONFIG_APP_ID);
             String appId = PropertyPayUtil.getValue(AlipayConstant.CONFIG_APP_ID);
             if (!appId.equals(callbackAppId)) {
-                log.error(">>> callback order null, result:{}", result);
+                log.error(">>> callback order null, params:{}", params);
                 return PayConstant.FAILURE;
             }
             // 检查订单
-            String outTradeNo = result.get(AlipayConstant.PARAM_OUT_TRADE_NO);
+            String outTradeNo = params.get(AlipayConstant.PARAM_OUT_TRADE_NO);
             Order order = orderRepository.findFirstByOrderId(outTradeNo);
             if (order == null) {
-                log.error(">>> callback order null, result:{}", result);
+                log.error(">>> callback order null, params:{}", params);
                 return PayConstant.FAILURE;
             }
             // 检查金额
             String totalAmount = order.getOrderAmount().toString();
-            String callbackAmount = result.get(AlipayConstant.PARAM_TOTAL_AMOUNT);
+            String callbackAmount = params.get(AlipayConstant.PARAM_TOTAL_AMOUNT);
             if (!totalAmount.equals(callbackAmount)) {
-                log.error(">>> callback amount error, result:{}, order:{}", result, order);
+                log.error(">>> callback amount error, params:{}, order:{}", params, order);
                 return PayConstant.FAILURE;
             }
             // 检查是否已经回调
@@ -102,7 +94,7 @@ public class AlipayHandler {
                 return PayConstant.FAILURE;
             }
             // 检查支付状态
-            String tradeStatus = result.get(AlipayConstant.CALLBACK_TRADE_STATUS);
+            String tradeStatus = params.get(AlipayConstant.CALLBACK_TRADE_STATUS);
             if (AlipayConstant.TRADE_STATUS_SUCCESS.equals(tradeStatus) || AlipayConstant.TRADE_STATUS_FINISHED.equals(tradeStatus)) {
                 // 记录流水
                 OrderJournal orderJournal = OrderJournal.build(
@@ -126,9 +118,9 @@ public class AlipayHandler {
                 return PayConstant.FAILURE;
             }
         } else {
-            log.error(">>> callback sign verify failure, result:{}", result);
-            return PayConstant.FAILURE;
+            log.error(">>> callback sign verify failure, params:{}", params);
         }
+        return PayConstant.FAILURE;
     }
 
     public String refundCallback() {

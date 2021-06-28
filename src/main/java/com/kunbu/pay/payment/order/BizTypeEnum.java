@@ -1,14 +1,12 @@
-package com.kunbu.pay.payment.constant;
+package com.kunbu.pay.payment.order;
 
 /**
- * 账单类型
+ * 业务类型
  */
-public enum BillTypeEnum {
+public enum BizTypeEnum {
 
-    ORDER(1, "订单"),
-    REFUND(2, "退款"),
-    WITHDRAW(3, "提现"),
-    DEPOSIT(4, "保证金"),
+    ORDER(1, "订单业务"),
+    SERVICE(2, "服务业务"),
 
     ;
 
@@ -16,7 +14,7 @@ public enum BillTypeEnum {
 
     private String value;
 
-    BillTypeEnum(Integer type, String value) {
+    BizTypeEnum(Integer type, String value) {
         this.type = type;
         this.value = value;
     }
