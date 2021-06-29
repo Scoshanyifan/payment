@@ -44,4 +44,8 @@ public class ApiResult implements Serializable {
         result.setMsg(msg);
         return result;
     }
+
+    public boolean isSuccess() {
+        return success.booleanValue() == true;
+    }
 }

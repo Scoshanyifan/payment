@@ -1,6 +1,7 @@
 package com.kunbu.pay.payment.util;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Slf4j
+@Component
 public class PropertyPayUtil {
 
     public static final String PROPERTY_PREFIX = "pay.properties";

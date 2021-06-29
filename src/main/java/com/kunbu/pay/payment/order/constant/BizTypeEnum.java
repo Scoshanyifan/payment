@@ -1,4 +1,4 @@
-package com.kunbu.pay.payment.order;
+package com.kunbu.pay.payment.order.constant;
 
 /**
  * 业务类型

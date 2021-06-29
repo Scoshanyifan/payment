@@ -25,4 +25,13 @@ public enum PayTypeEnum {
     public String getValue() {
         return value;
     }
+
+    public static PayTypeEnum of(Integer type) {
+        for (PayTypeEnum e : values()) {
+            if (e.type.equals(type)) {
+                return e;
+            }
+        }
+        return null;
+    }
 }

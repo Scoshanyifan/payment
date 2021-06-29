@@ -2,17 +2,17 @@ package com.kunbu.pay.payment.biz.ali;
 
 public interface AlipayConstant {
 
-    String CONFIG_SERVER_URL                = "serverUrl";
-    String CONFIG_APP_ID                    = "appId";
-    String CONFIG_PRIVATE_KEY               = "privateKey";
-    String CONFIG_ALIPAY_PUBLIC_KEY         = "alipayPublicKey";
+    String CONFIG_SERVER_URL                = "alipay.serverUrl";
+    String CONFIG_APP_ID                    = "alipay.appId";
+    String CONFIG_PRIVATE_KEY               = "alipay.privateKey";
+    String CONFIG_ALIPAY_PUBLIC_KEY         = "alipay.alipayPublicKey";
 
-    String CONFIG_FORMAT                    = "format";
-    String CONFIG_CHARSET                   = "charset";
-    String CONFIG_SIGN_TYPE                 = "signType";
+    String CONFIG_FORMAT                    = "alipay.format";
+    String CONFIG_CHARSET                   = "alipay.charset";
+    String CONFIG_SIGN_TYPE                 = "alipay.signType";
 
-    String CONFIG_NOTIFY_URL                = "notifyUrl";
-    String CONFIG_RETURN_URL                = "returnUrl";
+    String CONFIG_NOTIFY_URL                = "alipay.notifyUrl";
+    String CONFIG_RETURN_URL                = "alipay.returnUrl";
 
     /** ================================= 支付接口参数 ================================= */
 

@@ -1,4 +1,4 @@
-package com.kunbu.pay.payment.order.dto;
+package com.kunbu.pay.payment.order.entity;
 
 import lombok.Data;
 
@@ -8,10 +8,6 @@ import java.io.Serializable;
 public class OrderItemDto implements Serializable {
 
     private Long productId;
-
-    private String productName;
-
-    private Long price;
 
     private Integer count;
 

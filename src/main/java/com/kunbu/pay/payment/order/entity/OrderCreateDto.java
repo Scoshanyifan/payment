@@ -1,4 +1,4 @@
-package com.kunbu.pay.payment.order.dto;
+package com.kunbu.pay.payment.order.entity;
 
 import lombok.Data;
 
@@ -9,8 +9,6 @@ import java.util.List;
 public class OrderCreateDto implements Serializable {
 
     private List<OrderItemDto> items;
-
-    private Integer payType;
 
     private Long addressId;
 

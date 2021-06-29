@@ -2,7 +2,14 @@ server:
   port: 9000
 
 spring:
-
+  jpa:
+    hibernate:
+          # 生产环境设置成 none(true)，避免程序运行时自动更新数据库结构
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     druid:

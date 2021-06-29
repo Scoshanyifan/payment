@@ -1,4 +1,4 @@
-package com.kunbu.pay.payment.order;
+package com.kunbu.pay.payment.order.entity;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;

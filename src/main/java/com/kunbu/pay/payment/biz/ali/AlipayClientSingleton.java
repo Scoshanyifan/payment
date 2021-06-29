@@ -1,9 +1,12 @@
 package com.kunbu.pay.payment.biz.ali;
 
+import cn.hutool.json.JSONUtil;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.kunbu.pay.payment.util.PropertyPayUtil;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class AlipayClientSingleton {
 
     private AlipayClientSingleton(){}

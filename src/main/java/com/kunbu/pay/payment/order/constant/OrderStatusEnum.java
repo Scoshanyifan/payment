@@ -1,10 +1,16 @@
-package com.kunbu.pay.payment.order;
+package com.kunbu.pay.payment.order.constant;
 
 public enum OrderStatusEnum {
 
-    WAIT_PAY(0, "待支付"),
-    PAID(1, "已支付"),
-    CANCEL(2, "已取消"),
+    WAIT_PAY(1, "已下单待付款"),
+    PAID(2, "已支付待发货"),
+    DELIVERED(3, "已发货待收货"),
+    FINISHED(4, "已完成"),
+    /**
+     * 下单未支付-取消
+     * 已付款-取消
+     */
+    CANCEL(5, "已取消"),
 
     ;
 
