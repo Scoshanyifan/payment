@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN">
     <properties>
-        <property name="LOG_SYS_PATH">/root/logs/tool/sys</property>
-        <property name="LOG_ERROR_PATH">/root/logs/tool/error</property>
+        <property name="LOG_SYS_PATH">/root/logs/pay/sys</property>
+        <property name="LOG_ERROR_PATH">/root/logs/pay/error</property>
     </properties>
 
     <Appenders>

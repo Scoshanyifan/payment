@@ -20,6 +20,8 @@ public interface AlipayConstant {
     String PARAM_PRODUCT_CODE               = "product_code";
     String PARAM_TOTAL_AMOUNT               = "total_amount";
     String PARAM_SUBJECT                    = "subject";
+    String PARAM_APP_ID                      = "app_id";
+    String PARAM_SELLER_ID                  = "seller_id";
 
     String PRODUCT_CODE_PAGE                = "FAST_INSTANT_TRADE_PAY";
 

@@ -13,6 +13,7 @@ import com.kunbu.pay.payment.dao.OrderJournalRepository;
 import com.kunbu.pay.payment.order.dao.OrderRepository;
 import com.kunbu.pay.payment.order.entity.Order;
 import com.kunbu.pay.payment.entity.OrderJournal;
+import com.kunbu.pay.payment.util.MoneyUtil;
 import com.kunbu.pay.payment.util.PropertyPayUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,10 +68,10 @@ public class AlipayHandler {
         );
         if (signVerified) {
             // 检查基础配置
-            String callbackAppId = params.get(AlipayConstant.CONFIG_APP_ID);
+            String callbackAppId = params.get(AlipayConstant.PARAM_APP_ID);
             String appId = PropertyPayUtil.getValue(AlipayConstant.CONFIG_APP_ID);
             if (!appId.equals(callbackAppId)) {
-                log.error(">>> callback order null, params:{}", params);
+                log.error(">>> callback appId error, params:{}", params);
                 return PayConstant.FAILURE;
             }
             // 检查订单
@@ -81,7 +82,7 @@ public class AlipayHandler {
                 return PayConstant.FAILURE;
             }
             // 检查金额
-            String totalAmount = order.getOrderAmount().toString();
+            String totalAmount = MoneyUtil.convertFen2Yuan(order.getOrderAmount());
             String callbackAmount = params.get(AlipayConstant.PARAM_TOTAL_AMOUNT);
             if (!totalAmount.equals(callbackAmount)) {
                 log.error(">>> callback amount error, params:{}, order:{}", params, order);

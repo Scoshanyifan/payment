@@ -4,7 +4,6 @@ server:
 spring:
   jpa:
     hibernate:
-          # Éú²ú»·¾³ÉèÖÃ³É none(true)£¬±ÜÃâ³ÌĞòÔËĞĞÊ±×Ô¶¯¸üĞÂÊı¾İ¿â½á¹¹
       ddl-auto: none
     show-sql: true
     properties:
@@ -33,13 +32,10 @@ spring:
       test-on-return: false
       test-while-idle: true
       time-between-eviction-runs-millis: 60000
-      # ÑéÖ¤Êı¾İ¿âÁ¬½ÓµÄ²éÑ¯Óï¾ä
       validation-query: SELECT 1
-      # ºÏ²¢¶à¸öDruidDataSourceµÄ¼à¿ØÊı¾İ
       useGlobalDataSourceStat: true
-      # ÅäÖÃ¼à¿ØÍ³¼ÆÀ¹½ØµÄfilters£¬È¥µôºó¼à¿Ø½çÃæsqlÎŞ·¨Í³¼Æ£¬wallÓÃÓÚ·À»ğÇ½
+      # é…ç½®ç›‘æ§ç»Ÿè®¡æ‹¦æˆªçš„filtersï¼Œå»æ‰åç›‘æ§ç•Œé¢sqlæ— æ³•ç»Ÿè®¡ï¼Œwallç”¨äºé˜²ç«å¢™
       filters: stat
-      # ÂıSQLÈÕÖ¾
       filter:
         stat:
         enabled: true

@@ -14,7 +14,8 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 
     List<Product> findAllByUserId(String userId);
 
-    Product getById(Long id);
+    @Query(value="select * from product where id = ?1 ",nativeQuery = true)
+    Product getByProductId(Long id);
 
     @Query(value="select * from product where id in (:idList) ",nativeQuery = true)
     List<Product> getByProductIdList(@Param("idList") List<Long> idList);

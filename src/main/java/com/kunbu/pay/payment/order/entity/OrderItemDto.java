@@ -9,7 +9,15 @@ public class OrderItemDto implements Serializable {
 
     private Long productId;
 
-    private Integer count;
+    private Integer productNumber;
+
+    //
+
+    private Long productPrice;
+
+    private String productName;
+
+
 
 }
 

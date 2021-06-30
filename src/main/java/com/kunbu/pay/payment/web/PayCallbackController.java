@@ -13,7 +13,7 @@ import java.util.Enumeration;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/notify")
+@RequestMapping("/order/notify")
 public class PayCallbackController {
 
     @Autowired

@@ -3,15 +3,13 @@ package com.kunbu.pay.payment.order;
 import cn.hutool.http.server.HttpServerRequest;
 import com.kunbu.pay.payment.biz.ali.AlipayConstant;
 import com.kunbu.pay.payment.entity.ApiResult;
+import com.kunbu.pay.payment.order.dao.ProductRepository;
 import com.kunbu.pay.payment.order.entity.OrderCreateDto;
 import com.kunbu.pay.payment.util.PropertyPayUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,16 +21,30 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
-    @PostMapping("/create")
-    public String createOrder(@RequestBody OrderCreateDto orderCreateDto, HttpServerRequest request) {
-        log.info(">>> createOrder, order:{}", orderCreateDto);
-        orderCreateDto.setUserId("2233");
-        orderService.createOrder(orderCreateDto);
+    @Autowired
+    ProductRepository productRepository;
 
-        return "pay";
+    @ResponseBody
+    @GetMapping("/get")
+    public ApiResult getOrderInfo(@RequestParam String orderId) {
+        return orderService.getOrderInfo(orderId);
     }
 
-    @PostMapping("/pay")
+    @ResponseBody
+    @GetMapping("/product")
+    public ApiResult getProductInfo(@RequestParam Long productId) {
+        return ApiResult.success(productRepository.getByProductId(productId));
+    }
+
+    @PostMapping("/create")
+    @ResponseBody
+    public ApiResult createOrder(@RequestBody OrderCreateDto orderCreateDto, HttpServerRequest request) {
+        log.info(">>> createOrder, order:{}", orderCreateDto);
+        orderCreateDto.setUserId("2233");
+        return orderService.createOrder(orderCreateDto);
+    }
+
+    @GetMapping("/pay")
     public void pay(@RequestParam String orderId, @RequestParam Integer payType, HttpServletResponse response) throws Exception {
         ApiResult payResult = orderService.payOrder(orderId, "2233", payType);
         if (payResult.isSuccess()) {
