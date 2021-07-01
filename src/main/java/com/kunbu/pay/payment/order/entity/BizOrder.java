@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="order")
-public class Order implements Serializable {
+@Table(name="biz_order")
+public class BizOrder implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -19,8 +19,8 @@ public class Order implements Serializable {
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "order_id")
-    private String orderId;
+    @Column(name = "biz_order_no")
+    private String bizOrderNo;
 
     @Column(name = "order_amount")
     private Long orderAmount;

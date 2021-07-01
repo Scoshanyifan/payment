@@ -1,10 +1,10 @@
 package com.kunbu.pay.payment.dao;
 
-import com.kunbu.pay.payment.entity.OrderJournal;
+import com.kunbu.pay.payment.entity.PayJournal;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface OrderJournalRepository extends JpaRepository<OrderJournal, Long>, JpaSpecificationExecutor<OrderJournal> {
+public interface PayJournalRepository extends JpaRepository<PayJournal, Long>, JpaSpecificationExecutor<PayJournal> {
 
     int countByBizIdAndPayTypeAndBillType(String bizId, Integer payType, Integer billType);
 

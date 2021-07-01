@@ -1,4 +1,4 @@
-package com.kunbu.pay.payment.order.entity;
+package com.kunbu.pay.payment.order.entity.dto;
 
 import lombok.Data;
 

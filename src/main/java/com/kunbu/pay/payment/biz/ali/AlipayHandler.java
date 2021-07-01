@@ -9,10 +9,11 @@ import com.alipay.api.response.AlipayTradePagePayResponse;
 import com.kunbu.pay.payment.constant.BillTypeEnum;
 import com.kunbu.pay.payment.order.constant.OrderStatusEnum;
 import com.kunbu.pay.payment.constant.PayConstant;
-import com.kunbu.pay.payment.dao.OrderJournalRepository;
-import com.kunbu.pay.payment.order.dao.OrderRepository;
-import com.kunbu.pay.payment.order.entity.Order;
-import com.kunbu.pay.payment.entity.OrderJournal;
+import com.kunbu.pay.payment.dao.PayJournalRepository;
+import com.kunbu.pay.payment.order.dao.BizOrderRepository;
+import com.kunbu.pay.payment.order.dao.SubOrderRepository;
+import com.kunbu.pay.payment.order.entity.BizOrder;
+import com.kunbu.pay.payment.entity.PayJournal;
 import com.kunbu.pay.payment.util.MoneyUtil;
 import com.kunbu.pay.payment.util.PropertyPayUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,10 +27,13 @@ import java.util.Map;
 public class AlipayHandler {
 
     @Autowired
-    private OrderJournalRepository orderJournalRepository;
+    private PayJournalRepository payJournalRepository;
 
     @Autowired
-    private OrderRepository orderRepository;
+    private BizOrderRepository bizOrderRepository;
+
+    @Autowired
+    private SubOrderRepository subOrderRepository;
 
     public String pagePay(AlipaySignContent alipaySignContent) throws Exception {
         AlipayClient alipayClient = AlipayClientSingleton.getAlipayClient();
@@ -74,44 +78,43 @@ public class AlipayHandler {
                 log.error(">>> callback appId error, params:{}", params);
                 return PayConstant.FAILURE;
             }
-            // 检查订单
+            // 检查订单 TODO 远程
             String outTradeNo = params.get(AlipayConstant.PARAM_OUT_TRADE_NO);
-            Order order = orderRepository.findFirstByOrderId(outTradeNo);
-            if (order == null) {
-                log.error(">>> callback order null, params:{}", params);
+            BizOrder bizOrder = bizOrderRepository.findByOrderNo(outTradeNo);
+            if (bizOrder == null) {
+                log.error(">>> callback bizOrder null, params:{}", params);
                 return PayConstant.FAILURE;
             }
             // 检查金额
-            String totalAmount = MoneyUtil.convertFen2Yuan(order.getOrderAmount());
+            String totalAmount = MoneyUtil.convertFen2Yuan(bizOrder.getOrderAmount());
             String callbackAmount = params.get(AlipayConstant.PARAM_TOTAL_AMOUNT);
             if (!totalAmount.equals(callbackAmount)) {
-                log.error(">>> callback amount error, params:{}, order:{}", params, order);
+                log.error(">>> callback amount error, params:{}, bizOrder:{}", params, bizOrder);
                 return PayConstant.FAILURE;
             }
             // 检查是否已经回调
-            int checkJournal = orderJournalRepository.countByBizIdAndPayTypeAndBillType(order.getOrderId(), order.getPayType(), BillTypeEnum.ORDER.getType());
+            int checkJournal = payJournalRepository.countByBizIdAndPayTypeAndBillType(bizOrder.getBizOrderNo(), bizOrder.getPayType(), BillTypeEnum.ORDER.getType());
             if (checkJournal > 0) {
-                log.error(">>> callback journal repeat, order:{}", order);
+                log.error(">>> callback journal repeat, bizOrder:{}", bizOrder);
                 return PayConstant.FAILURE;
             }
             // 检查支付状态
             String tradeStatus = params.get(AlipayConstant.CALLBACK_TRADE_STATUS);
             if (AlipayConstant.TRADE_STATUS_SUCCESS.equals(tradeStatus) || AlipayConstant.TRADE_STATUS_FINISHED.equals(tradeStatus)) {
                 // 记录流水
-                OrderJournal orderJournal = OrderJournal.build(
-                        order.getOrderId(),
-                        order.getUserId(),
+                PayJournal payJournal = PayJournal.build(
+                        bizOrder.getBizOrderNo(),
+                        bizOrder.getUserId(),
                         BillTypeEnum.ORDER.getType(),
-                        order.getPayType(),
-                        order.getOrderAmount(),
+                        bizOrder.getPayType(),
+                        bizOrder.getOrderAmount(),
                         BillTypeEnum.ORDER.getValue()
                 );
-                orderJournalRepository.save(orderJournal);
+                payJournalRepository.save(payJournal);
                 // 更新订单状态 TODO MQ
-                int res = orderRepository.updateOrderStatus(OrderStatusEnum.PAID.getStatus(), order.getOrderId(), OrderStatusEnum.WAIT_PAY.getStatus());
-                if (res <= 0) {
-                    log.error(">>> callback update order status failure, order:{}", order);
-                }
+                int bizRes = bizOrderRepository.updateOrderStatus(OrderStatusEnum.PAID.getStatus(), bizOrder.getBizOrderNo(), OrderStatusEnum.WAIT_PAY.getStatus());
+                int subRes = subOrderRepository.updateSubOrderStatusByBizOrder(OrderStatusEnum.PAID.getStatus(), bizOrder.getBizOrderNo(), OrderStatusEnum.WAIT_PAY.getStatus());
+                log.info(">>> bizRes:{}, subRes:{}", bizRes,subRes);
                 return PayConstant.SUCCESS;
             } else if (AlipayConstant.TRADE_STATUS_SUCCESS.equals(tradeStatus)) {
                 return PayConstant.SUCCESS;

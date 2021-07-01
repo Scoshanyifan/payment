@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="order_journal")
-public class OrderJournal implements Serializable {
+@Table(name="pay_journal")
+public class PayJournal implements Serializable {
 
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -48,17 +48,17 @@ public class OrderJournal implements Serializable {
 
     public @interface Update {}
 
-    public static OrderJournal build(String bizId, String userId, Integer billType, Integer payType, Long amount, String remark) {
-        OrderJournal orderJournal = new OrderJournal();
-        orderJournal.setBizId(bizId);
-        orderJournal.setUserId(userId);
-        orderJournal.setBillType(billType);
-        orderJournal.setPayType(payType);
-        orderJournal.setAmount(amount);
-        orderJournal.setRemark(remark);
+    public static PayJournal build(String bizId, String userId, Integer billType, Integer payType, Long amount, String remark) {
+        PayJournal payJournal = new PayJournal();
+        payJournal.setBizId(bizId);
+        payJournal.setUserId(userId);
+        payJournal.setBillType(billType);
+        payJournal.setPayType(payType);
+        payJournal.setAmount(amount);
+        payJournal.setRemark(remark);
         LocalDateTime current = LocalDateTime.now();
-        orderJournal.setCreateTime(current);
-        orderJournal.setUpdateTime(current);
-        return orderJournal;
+        payJournal.setCreateTime(current);
+        payJournal.setUpdateTime(current);
+        return payJournal;
     }
 }

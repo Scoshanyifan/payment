@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name="product")
-public class Product {
+@Table(name="biz_product")
+public class BizProduct {
 
     public static final Integer STATUS_UP = 1;
     public static final Integer STATUS_DOWN = 2;
@@ -22,20 +22,20 @@ public class Product {
     @Column(name = "user_id")
     private String userId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "product_name")
+    private String productName;
 
-    @Column(name = "icon")
-    private String icon;
+    @Column(name = "product_icon")
+    private String productIcon;
 
-    @Column(name = "price")
-    private Long price;
+    @Column(name = "product_price")
+    private Long productPrice;
 
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(name = "status")
-    private Integer status;
+    @Column(name = "product_status")
+    private Integer productStatus;
 
     @Column(name = "ext_info")
     private String extInfo;

@@ -4,7 +4,7 @@ import cn.hutool.http.server.HttpServerRequest;
 import com.kunbu.pay.payment.biz.ali.AlipayConstant;
 import com.kunbu.pay.payment.entity.ApiResult;
 import com.kunbu.pay.payment.order.dao.ProductRepository;
-import com.kunbu.pay.payment.order.entity.OrderCreateDto;
+import com.kunbu.pay.payment.order.entity.dto.OrderCreateDto;
 import com.kunbu.pay.payment.util.PropertyPayUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,8 @@ public class OrderController {
 
     @ResponseBody
     @GetMapping("/get")
-    public ApiResult getOrderInfo(@RequestParam String orderId) {
-        return orderService.getOrderInfo(orderId);
+    public ApiResult getOrderInfo(@RequestParam String bizOrderNo) {
+        return orderService.getOrderInfo(bizOrderNo);
     }
 
     @ResponseBody
@@ -45,8 +45,8 @@ public class OrderController {
     }
 
     @GetMapping("/pay")
-    public void pay(@RequestParam String orderId, @RequestParam Integer payType, HttpServletResponse response) throws Exception {
-        ApiResult payResult = orderService.payOrder(orderId, "2233", payType);
+    public void pay(@RequestParam String bizOrderNo, @RequestParam Integer payType, HttpServletResponse response) throws Exception {
+        ApiResult payResult = orderService.payOrder(bizOrderNo, "2233", payType);
         if (payResult.isSuccess()) {
             response.setContentType("text/html;charset=" + PropertyPayUtil.getValue(AlipayConstant.CONFIG_CHARSET));
             response.getWriter().write(payResult.getData().toString());
